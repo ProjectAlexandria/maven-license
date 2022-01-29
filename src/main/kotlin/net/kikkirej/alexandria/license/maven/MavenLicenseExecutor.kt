@@ -26,7 +26,7 @@ class MavenLicenseExecutor(@Autowired val mavenDependencyRepository: MavenDepend
         log.info("checking analysis ${externalTask.businessKey}: $dependencies")
         for (dependency in dependencies){
             val rule = getRuleForDependency(dependency.groupId, false)
-            log.info("identified license rule $rule for $dependency")
+            log.debug("identified license rule $rule for $dependency")
             if(rule != null && dependency.license != rule.license){
                 dependency.license = rule.license
                 mavenDependencyRepository.save(dependency)
@@ -41,6 +41,7 @@ class MavenLicenseExecutor(@Autowired val mavenDependencyRepository: MavenDepend
            return ruleOptional.get()
         }
         val upperGroupId = getUpperGroupId(groupId)
+        log.info("substring: $upperGroupId")
         if (upperGroupId.isEmpty()){
             return null
         }
