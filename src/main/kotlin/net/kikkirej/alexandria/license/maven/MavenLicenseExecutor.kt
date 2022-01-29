@@ -8,6 +8,7 @@ import org.camunda.bpm.client.spring.annotation.ExternalTaskSubscription
 import org.camunda.bpm.client.task.ExternalTask
 import org.camunda.bpm.client.task.ExternalTaskHandler
 import org.camunda.bpm.client.task.ExternalTaskService
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
@@ -16,11 +17,16 @@ import org.springframework.stereotype.Component
 class MavenLicenseExecutor(@Autowired val mavenDependencyRepository: MavenDependencyRepository,
                            @Autowired val mavenRuleRepository: MavenRuleRepository,
 ): ExternalTaskHandler {
+
+    val log =  LoggerFactory.getLogger(javaClass)
+
     override fun execute(externalTask: ExternalTask?, externalTaskService: ExternalTaskService?) {
         val dependencies =
             mavenDependencyRepository.getDependenciesForAnalysisId(externalTask!!.businessKey.toLong())
+        log.info("checking analysis ${externalTask.businessKey}: $dependencies")
         for (dependency in dependencies){
             val rule = getRuleForDependency(dependency.groupId, false)
+            log.info("identified license rule $rule for $dependencies")
             if(rule != null && dependency.license != rule.license){
                 dependency.license = rule.license
                 mavenDependencyRepository.save(dependency)

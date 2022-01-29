@@ -22,7 +22,10 @@ class MavenDependency(@Id var id: Long = 0,
                       var groupId: String,
                       var artifactId: String,
                       @ManyToOne var license: License?,
-)
+){
+    override fun toString(): String =
+        "MavenDependency(id=$id, groupId='$groupId', artifactId='$artifactId', license=$license)"
+}
 
 @Entity(name = "license")
 class License(@Id @GeneratedValue var id: Long = 0,
@@ -40,4 +43,7 @@ class MavenRule(@Id var id: Long = 0,
                 var groupIdPrefix: String,
                 var inheritance: Boolean,
                 @ManyToOne var license: License?,
-)
+){
+    override fun toString(): String =
+        "MavenRule(id=$id, groupIdPrefix='$groupIdPrefix', inheritance=$inheritance, license=$license)"
+}
