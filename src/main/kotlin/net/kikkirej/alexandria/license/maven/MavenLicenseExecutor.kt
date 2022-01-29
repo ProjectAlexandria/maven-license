@@ -21,10 +21,12 @@ class MavenLicenseExecutor(@Autowired val mavenDependencyRepository: MavenDepend
             mavenDependencyRepository.getDependenciesForAnalysisId(externalTask!!.businessKey.toLong())
         for (dependency in dependencies){
             val rule = getRuleForDependency(dependency.groupId, false)
-            if(rule != null){
+            if(rule != null && dependency.license != rule.license){
                 dependency.license = rule.license
+                mavenDependencyRepository.save(dependency)
             }
         }
+        externalTaskService!!.complete(externalTask)
     }
 
     private fun getRuleForDependency(groupId: String, inherited: Boolean): MavenRule? {
