@@ -6,7 +6,7 @@ import java.util.*
 
 interface MavenDependencyRepository: CrudRepository<MavenDependency, Long>{
 
-    @Query("select distinct md from MavenModuleDependency mmd " +
+    @Query("select distinct md from maven_module_dependency mmd " +
             "join mmd.module mm " +
             "join mm.analysis a " +
             "join mmd.dependency md " +
