@@ -41,7 +41,6 @@ class MavenLicenseExecutor(@Autowired val mavenDependencyRepository: MavenDepend
            return ruleOptional.get()
         }
         val upperGroupId = getUpperGroupId(groupId)
-        log.info("substring: $upperGroupId")
         if (upperGroupId.isEmpty()){
             return null
         }
@@ -54,6 +53,6 @@ class MavenLicenseExecutor(@Autowired val mavenDependencyRepository: MavenDepend
         if(lastIndexDot<=0){
             return ""
         }
-        return groupId.substring(0, lastIndexDot-1)
+        return groupId.substring(0, lastIndexDot)
     }
 }
